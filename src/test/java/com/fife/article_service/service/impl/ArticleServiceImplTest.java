@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,5 +51,24 @@ public class ArticleServiceImplTest {
         assertEquals("Test Title", response.getTitle());
         assertEquals("Test Content", response.getContent());
         verify(articleDao).save(any(ArticleModel.class));
+    }
+
+    @Test
+    @DisplayName("getAllArticles() should return a list of response DTOs")
+    void testGetAllArticles() {
+        List<ArticleModel> models = List.of(
+                new ArticleModel(1L, "Title 1", "Content 1", "Author 1", LocalDateTime.now()),
+                new ArticleModel(2L, "Title 2", "Content 2", "Author 2", LocalDateTime.now())
+        );
+
+        when(articleDao.findAll()).thenReturn(models);
+
+        List<ArticleResponseDTO> responses = articleService.getAllArticles();
+
+        assertEquals(2, responses.size());
+        assertEquals("Title 1", responses.get(0).getTitle());
+        assertEquals("Title 2", responses.get(1).getTitle());
+
+        verify(articleDao).findAll();
     }
 }
