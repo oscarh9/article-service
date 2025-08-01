@@ -78,4 +78,22 @@ public class ArticleControllerTest {
                 .andExpect(jsonPath("$[0].title").value("Sample Title"))
                 .andExpect(jsonPath("$[1].title").value("Another Title"));
     }
+
+    @Test
+    void getArticleById_WhenFound_ReturnsArticle() throws Exception {
+        Mockito.when(articleService.getArticleById(1L)).thenReturn(sampleResponse);
+
+        mockMvc.perform(get("/api/articles/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Sample Title"))
+                .andExpect(jsonPath("$.content").value("Sample Content"));
+    }
+
+    @Test
+    void getArticleById_WhenNotFound_Returns404() throws Exception {
+        Mockito.when(articleService.getArticleById(99L)).thenThrow(new ResourceNotFoundException("Article not found"));
+
+        mockMvc.perform(get("/api/articles/99"))
+                .andExpect(status().isNotFound());
+    }
 }
