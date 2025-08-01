@@ -3,6 +3,7 @@ package com.fife.article_service.service.impl;
 import com.fife.article_service.dao.ArticleDao;
 import com.fife.article_service.dto.ArticleRequestDTO;
 import com.fife.article_service.dto.ArticleResponseDTO;
+import com.fife.article_service.exception.ResourceNotFoundException;
 import com.fife.article_service.model.ArticleModel;
 import com.fife.article_service.service.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +34,32 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.findAll().stream()
                 .map(articleModel -> modelMapper.map(articleModel, ArticleResponseDTO.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ArticleResponseDTO getArticleById(Long id) {
+        ArticleModel model = articleDao.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + id));
+        return modelMapper.map(model, ArticleResponseDTO.class);
+    }
+
+    @Override
+    public ArticleResponseDTO updateArticle(Long id, ArticleRequestDTO articleRequestDTO) {
+        ArticleModel existing = articleDao.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + id));
+
+        existing.setTitle(articleRequestDTO.getTitle().trim());
+        existing.setContent(articleRequestDTO.getContent().trim());
+        existing.setAuthor(articleRequestDTO.getAuthor().trim());
+
+        ArticleModel updated = articleDao.save(existing);
+        return modelMapper.map(updated, ArticleResponseDTO.class);
+    }
+
+    @Override
+    public void deleteArticle(Long id) {
+        ArticleModel article = articleDao.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + id));
+        articleDao.delete(article);
     }
 }
