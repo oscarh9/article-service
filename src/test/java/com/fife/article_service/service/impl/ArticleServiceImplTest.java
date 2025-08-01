@@ -5,7 +5,6 @@ import com.fife.article_service.dto.ArticleRequestDTO;
 import com.fife.article_service.dto.ArticleResponseDTO;
 import com.fife.article_service.exception.ResourceNotFoundException;
 import com.fife.article_service.model.ArticleModel;
-import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
@@ -95,6 +94,56 @@ public class ArticleServiceImplTest {
         when(articleDao.findById(articleId)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> articleService.getArticleById(articleId));
+        verify(articleDao).findById(articleId);
+    }
+
+    @Test
+    void updateArticle_WhenArticleExists_ReturnsUpdatedResponseDTO() {
+        Long articleId = 1L;
+        ArticleRequestDTO request = new ArticleRequestDTO();
+        request.setTitle("Updated Title");
+        request.setContent("Updated Content");
+        request.setAuthor("Updated Author");
+
+        ArticleModel existingModel = new ArticleModel(
+                articleId,
+                "Old Title",
+                "Old Content",
+                "Old Author",
+                LocalDateTime.now()
+        );
+
+        ArticleModel updatedModel = new ArticleModel(
+                articleId,
+                "Updated Title",
+                "Updated Content",
+                "Updated Author",
+                LocalDateTime.now()
+        );
+
+        when(articleDao.findById(articleId)).thenReturn(Optional.of(existingModel));
+        when(articleDao.save(any(ArticleModel.class))).thenReturn(updatedModel);
+
+        ArticleResponseDTO response = articleService.updateArticle(articleId, request);
+
+        assertEquals("Updated Title", response.getTitle());
+        assertEquals("Updated Content", response.getContent());
+        assertEquals("Updated Author", response.getAuthor());
+        verify(articleDao).findById(articleId);
+        verify(articleDao).save(any(ArticleModel.class));
+    }
+
+
+    @Test
+    void updateArticle_WhenArticleDoesNotExist_ThrowsResourceNotFoundException() {
+        Long articleId = 99L;
+        ArticleRequestDTO request = new ArticleRequestDTO();
+        request.setTitle("Updated Title");
+        request.setContent("Updated Content");
+
+        when(articleDao.findById(articleId)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> articleService.updateArticle(articleId, request));
         verify(articleDao).findById(articleId);
     }
 
