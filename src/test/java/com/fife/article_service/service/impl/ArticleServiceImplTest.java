@@ -147,4 +147,37 @@ public class ArticleServiceImplTest {
         verify(articleDao).findById(articleId);
     }
 
+    @Test
+    void deleteArticle_WhenArticleExists_DeletesArticle() {
+        Long articleId = 1L;
+
+        ArticleModel existingModel = new ArticleModel(
+                articleId,
+                "Title",
+                "Content",
+                "Author",
+                LocalDateTime.now()
+        );
+
+        when(articleDao.findById(articleId)).thenReturn(Optional.of(existingModel));
+        doNothing().when(articleDao).delete(existingModel);
+
+        assertDoesNotThrow(() -> articleService.deleteArticle(articleId));
+
+        verify(articleDao).findById(articleId);
+        verify(articleDao).delete(existingModel);
+    }
+
+    @Test
+    void deleteArticle_WhenArticleDoesNotExist_ThrowsResourceNotFoundException() {
+        Long articleId = 99L;
+        when(articleDao.findById(articleId)).thenReturn(Optional.empty());
+
+        assertThrows(ResourceNotFoundException.class, () -> articleService.deleteArticle(articleId));
+
+        verify(articleDao).findById(articleId);
+        verify(articleDao, never()).delete(any());
+    }
+
+
 }
