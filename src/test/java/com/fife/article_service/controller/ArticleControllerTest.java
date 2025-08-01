@@ -3,6 +3,7 @@ package com.fife.article_service.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fife.article_service.dto.ArticleRequestDTO;
 import com.fife.article_service.dto.ArticleResponseDTO;
+import com.fife.article_service.exception.ResourceNotFoundException;
 import com.fife.article_service.service.ArticleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -57,5 +59,23 @@ public class ArticleControllerTest {
                 .andExpect(jsonPath("$.title").value("Sample Title"))
                 .andExpect(jsonPath("$.content").value("Sample Content"))
                 .andExpect(jsonPath("$.author").value("Sample Author"));
+    }
+
+    @Test
+    void getAllArticles_ReturnsListOfArticles() throws Exception {
+        ArticleResponseDTO response2 = new ArticleResponseDTO();
+        response2.setId(2L);
+        response2.setTitle("Another Title");
+        response2.setContent("Another Content");
+        response2.setAuthor("Another Author");
+        response2.setCreatedAt(LocalDateTime.now());
+
+        Mockito.when(articleService.getAllArticles()).thenReturn(List.of(sampleResponse, response2));
+
+        mockMvc.perform(get("/api/articles"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(2))
+                .andExpect(jsonPath("$[0].title").value("Sample Title"))
+                .andExpect(jsonPath("$[1].title").value("Another Title"));
     }
 }
