@@ -8,6 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -30,5 +31,17 @@ public class JpaArticleDao implements ArticleDao {
         return articleRepository.findAll().stream()
                 .map(entity -> modelMapper.map(entity, ArticleModel.class))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<ArticleModel> findById(Long id) {
+        return articleRepository.findById(id)
+                .map(entity -> modelMapper.map(entity, ArticleModel.class));
+    }
+
+    @Override
+    public void delete(ArticleModel article) {
+        ArticleEntity entity = modelMapper.map(article, ArticleEntity.class);
+        articleRepository.delete(entity);
     }
 }
