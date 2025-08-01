@@ -28,4 +28,22 @@ public class ArticleController {
     public ResponseEntity<List<ArticleResponseDTO>> getAllArticles() {
         return ResponseEntity.ok(articleService.getAllArticles());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ArticleResponseDTO> getArticleById(@PathVariable Long id) {
+        ArticleResponseDTO article = articleService.getArticleById(id);
+        return ResponseEntity.ok(article);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ArticleResponseDTO> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
+        ArticleResponseDTO updated = articleService.updateArticle(id, articleRequestDTO);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+        articleService.deleteArticle(id);
+        return ResponseEntity.noContent().build();
+    }
 }
