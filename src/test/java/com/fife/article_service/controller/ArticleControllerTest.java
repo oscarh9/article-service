@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -96,4 +97,46 @@ public class ArticleControllerTest {
         mockMvc.perform(get("/api/articles/99"))
                 .andExpect(status().isNotFound());
     }
+
+    @Test
+    void updateArticle_WhenFound_ReturnsUpdatedArticle() throws Exception {
+        ArticleRequestDTO request = new ArticleRequestDTO();
+        request.setTitle("Updated Title");
+        request.setContent("Updated Content");
+        request.setAuthor("Updated Author");
+
+        ArticleResponseDTO updatedResponse = new ArticleResponseDTO();
+        updatedResponse.setId(1L);
+        updatedResponse.setTitle("Updated Title");
+        updatedResponse.setContent("Updated Content");
+        updatedResponse.setAuthor("Updated Author");
+        updatedResponse.setCreatedAt(LocalDateTime.now());
+
+        Mockito.when(articleService.updateArticle(eq(1L), any(ArticleRequestDTO.class))).thenReturn(updatedResponse);
+
+        mockMvc.perform(put("/api/articles/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Updated Title"))
+                .andExpect(jsonPath("$.content").value("Updated Content"))
+                .andExpect(jsonPath("$.author").value("Updated Author"));
+    }
+
+    @Test
+    void updateArticle_WhenNotFound_Returns404() throws Exception {
+        ArticleRequestDTO request = new ArticleRequestDTO();
+        request.setTitle("Updated Title");
+        request.setContent("Updated Content");
+        request.setAuthor("Someone");
+
+        Mockito.when(articleService.updateArticle(eq(99L), any(ArticleRequestDTO.class)))
+                .thenThrow(new ResourceNotFoundException("Article not found"));
+
+        mockMvc.perform(put("/api/articles/99")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isNotFound());
+    }
+
 }
