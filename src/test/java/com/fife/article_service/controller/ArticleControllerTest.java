@@ -139,4 +139,20 @@ public class ArticleControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    @Test
+    void deleteArticle_WhenFound_ReturnsNoContent() throws Exception {
+        Mockito.doNothing().when(articleService).deleteArticle(1L);
+
+        mockMvc.perform(delete("/api/articles/1"))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteArticle_WhenNotFound_Returns404() throws Exception {
+        Mockito.doThrow(new ResourceNotFoundException("Article not found")).when(articleService).deleteArticle(99L);
+
+        mockMvc.perform(delete("/api/articles/99"))
+                .andExpect(status().isNotFound());
+    }
+
 }
