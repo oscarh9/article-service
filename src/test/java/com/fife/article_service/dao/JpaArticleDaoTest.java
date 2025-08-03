@@ -89,4 +89,16 @@ public class JpaArticleDaoTest {
 
         assertTrue(result.isEmpty());
     }
+
+    @Test
+    void delete_shouldMapAndDeleteEntity() {
+        ArticleModel model = new ArticleModel(1L, "Title", "Content", "Author", LocalDateTime.now());
+        ArticleEntity entity = new ArticleEntity();
+
+        when(modelMapper.map(model, ArticleEntity.class)).thenReturn(entity);
+
+        jpaArticleDao.delete(model);
+
+        verify(articleRepository).delete(entity);
+    }
 }
