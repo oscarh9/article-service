@@ -20,12 +20,13 @@ jobs:
         if: success()
         run: mvn -B verify
       - name: Sonar
+        if: success()
         run: >
           mvn -B verify -DskipTests sonar:sonar
           -Dsonar.projectKey=oscarh9_article-service
           -Dsonar.organization=oscarh9
           -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.login=$SONAR_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
