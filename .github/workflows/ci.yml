@@ -1,0 +1,32 @@
+name: CI
+on:
+  push:
+    branches: ['develop']
+  pull_request:
+    branches: [ 'develop' ]
+jobs:
+  ci:
+    name: Test - Unit & Integration
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with: {fetch-depth: 0}
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 21
+      - name: Check code formatting with Spotless
+        run: mvn spotless:check
+      - name: Unit & Integration Tests
+        if: success()
+        run: mvn -B verify
+      - name: Sonar
+        if: success()
+        run: >
+          mvn -B verify -DskipTests sonar:sonar
+          -Dsonar.projectKey=oscarh9_article-service
+          -Dsonar.organization=oscarh9
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=$SONAR_TOKEN
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
