@@ -1,11 +1,13 @@
-server:
-  port: 8081
-
+# APPLICATION NAME
 spring:
+  application:
+    name: article-service
+# DATASOURCE
   datasource:
     url: jdbc:postgresql://localhost:5432/article_db
     username: postgres
     password: postgres
+# HIBERNATE-JPA
   jpa:
     hibernate:
       ddl-auto: validate
@@ -13,5 +15,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+# LIQUIBASE
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yml
+# SERVER PORT
+server:
+  port: 8081
