@@ -30,8 +30,7 @@ public class ArticleServiceImpl implements ArticleService {
     public Article getArticleById(Long id) {
         return articleDao
                 .findById(id)
-                .orElseThrow(
-                        () -> new NotFoundException("Article not found with id " + id));
+                .orElseThrow(() -> new NotFoundException("Article not found with id " + id));
     }
 
     @Override

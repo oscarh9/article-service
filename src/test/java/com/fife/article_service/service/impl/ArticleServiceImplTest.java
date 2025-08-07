@@ -99,8 +99,7 @@ class ArticleServiceImplTest {
         when(this.articleDao.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(
-                NotFoundException.class,
-                () -> this.articleService.updateArticle(id, updateData));
+                NotFoundException.class, () -> this.articleService.updateArticle(id, updateData));
         verify(this.articleDao, times(1)).findById(id);
         verify(this.articleDao, never()).save(any());
     }
