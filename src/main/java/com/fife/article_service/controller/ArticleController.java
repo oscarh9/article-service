@@ -1,44 +1,45 @@
 package com.fife.article_service.controller;
 
-import com.fife.article_service.dto.ArticleRequestDTO;
-import com.fife.article_service.dto.ArticleResponseDTO;
+import com.fife.article_service.dto.ArticleRequest;
+import com.fife.article_service.model.Article;
 import com.fife.article_service.service.ArticleService;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/articles")
 @RequiredArgsConstructor
 public class ArticleController {
 
+    private final ModelMapper modelMapper;
     private final ArticleService articleService;
 
     @PostMapping
-    public ResponseEntity<ArticleResponseDTO> createArticle(@Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
-        ArticleResponseDTO created = articleService.createArticle(articleRequestDTO);
-        return ResponseEntity.ok(created);
+    public ResponseEntity<Article> createArticle(
+            @Valid @RequestBody ArticleRequest articleRequest) {
+        Article article = modelMapper.map(articleRequest, Article.class);
+        return ResponseEntity.ok(articleService.createArticle(article));
     }
 
-
     @GetMapping
-    public ResponseEntity<List<ArticleResponseDTO>> getAllArticles() {
+    public ResponseEntity<List<Article>> getAllArticles() {
         return ResponseEntity.ok(articleService.getAllArticles());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ArticleResponseDTO> getArticleById(@PathVariable Long id) {
-        ArticleResponseDTO article = articleService.getArticleById(id);
-        return ResponseEntity.ok(article);
+    public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
+        return ResponseEntity.ok(articleService.getArticleById(id));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ArticleResponseDTO> updateArticle(@PathVariable Long id, @Valid @RequestBody ArticleRequestDTO articleRequestDTO) {
-        ArticleResponseDTO updated = articleService.updateArticle(id, articleRequestDTO);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<Article> updateArticle(
+            @PathVariable Long id, @Valid @RequestBody ArticleRequest articleRequest) {
+        Article article = modelMapper.map(articleRequest, Article.class);
+        return ResponseEntity.ok(articleService.updateArticle(id, article));
     }
 
     @DeleteMapping("/{id}")
