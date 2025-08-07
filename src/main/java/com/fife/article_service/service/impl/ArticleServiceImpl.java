@@ -1,65 +1,50 @@
 package com.fife.article_service.service.impl;
 
 import com.fife.article_service.dao.ArticleDao;
-import com.fife.article_service.dto.ArticleRequestDTO;
-import com.fife.article_service.dto.ArticleResponseDTO;
-import com.fife.article_service.exception.ResourceNotFoundException;
-import com.fife.article_service.model.ArticleModel;
+import com.fife.article_service.exception.NotFoundException;
+import com.fife.article_service.model.Article;
 import com.fife.article_service.service.ArticleService;
-import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleDao articleDao;
-    private final ModelMapper modelMapper;
 
     @Override
-    public ArticleResponseDTO createArticle(ArticleRequestDTO articleRequestDTO) {
-        ArticleModel articleModel = modelMapper.map(articleRequestDTO, ArticleModel.class);
-        articleModel.setCreatedAt(LocalDateTime.now());
-        ArticleModel saved = articleDao.save(articleModel);
-        return modelMapper.map(saved, ArticleResponseDTO.class);
+    public Article createArticle(Article article) {
+        article.setCreatedAt(LocalDateTime.now());
+        return articleDao.save(article);
     }
 
     @Override
-    public List<ArticleResponseDTO> getAllArticles() {
-        return articleDao.findAll().stream()
-                .map(articleModel -> modelMapper.map(articleModel, ArticleResponseDTO.class))
-                .collect(Collectors.toList());
+    public List<Article> getAllArticles() {
+        return articleDao.findAll();
     }
 
     @Override
-    public ArticleResponseDTO getArticleById(Long id) {
-        ArticleModel model = articleDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + id));
-        return modelMapper.map(model, ArticleResponseDTO.class);
+    public Article getArticleById(Long id) {
+        return articleDao
+                .findById(id)
+                .orElseThrow(() -> new NotFoundException("Article not found with id " + id));
     }
 
     @Override
-    public ArticleResponseDTO updateArticle(Long id, ArticleRequestDTO articleRequestDTO) {
-        ArticleModel existing = articleDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + id));
-
-        existing.setTitle(articleRequestDTO.getTitle().trim());
-        existing.setContent(articleRequestDTO.getContent().trim());
-        existing.setAuthor(articleRequestDTO.getAuthor().trim());
-
-        ArticleModel updated = articleDao.save(existing);
-        return modelMapper.map(updated, ArticleResponseDTO.class);
+    public Article updateArticle(Long id, Article article) {
+        Article existing = getArticleById(id);
+        existing.setTitle(article.getTitle());
+        existing.setContent(article.getContent());
+        existing.setUpdatedAt(LocalDateTime.now());
+        return articleDao.save(existing);
     }
 
     @Override
     public void deleteArticle(Long id) {
-        ArticleModel article = articleDao.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Article not found with id " + id));
+        Article article = getArticleById(id);
         articleDao.delete(article);
     }
 }

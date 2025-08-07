@@ -1,11 +1,13 @@
-server:
-  port: 8081
-
+# APPLICATION NAME
 spring:
+  application:
+    name: article-service
+# DATASOURCE
   datasource:
     url: jdbc:postgresql://localhost:5432/article_db
     username: postgres
     password: postgres
+# HIBERNATE-JPA
   jpa:
     hibernate:
       ddl-auto: validate
@@ -13,5 +15,26 @@ spring:
     properties:
       hibernate:
         format_sql: true
+# LIQUIBASE
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yml
+# SERVER PORT
+server:
+  port: 8081
+# OPEN API
+open-api-properties:
+  info:
+    contact:
+      name: Oscar
+      email: oscarherenciasakkis@gmail.com
+      url: oscarherenciasakkis.com
+    description: Article Service
+    title: Article Service
+    version: 0.0.1
+    license:
+      name: Apache 2.0
+      url: http://www.apache.org/licenses/LICENSE-2.0.html
+    termsOfService: http://swagger.io/terms/
+  server:
+    description: Local server
+    url: http://localhost:8081
