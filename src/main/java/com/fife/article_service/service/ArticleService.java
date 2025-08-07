@@ -1,15 +1,16 @@
 package com.fife.article_service.service;
 
-import com.fife.article_service.dto.ArticleRequestDTO;
-import com.fife.article_service.dto.ArticleResponseDTO;
-import org.springframework.web.bind.annotation.PathVariable;
-
+import com.fife.article_service.model.Article;
 import java.util.List;
 
 public interface ArticleService {
-    ArticleResponseDTO createArticle(ArticleRequestDTO articleRequestDTO);
-    List<ArticleResponseDTO> getAllArticles();
-    ArticleResponseDTO getArticleById(Long id);
-    ArticleResponseDTO updateArticle(Long id, ArticleRequestDTO articleRequestDTO);
+    Article createArticle(Article article);
+
+    List<Article> getAllArticles();
+
+    Article getArticleById(Long id);
+
+    Article updateArticle(Long id, Article article);
+
     void deleteArticle(Long id);
 }
