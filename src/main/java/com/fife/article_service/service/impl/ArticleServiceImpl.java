@@ -1,7 +1,7 @@
 package com.fife.article_service.service.impl;
 
 import com.fife.article_service.dao.ArticleDao;
-import com.fife.article_service.exception.ResourceNotFoundException;
+import com.fife.article_service.exception.NotFoundException;
 import com.fife.article_service.model.Article;
 import com.fife.article_service.service.ArticleService;
 import java.time.LocalDateTime;
@@ -31,7 +31,7 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao
                 .findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Article not found with id " + id));
+                        () -> new NotFoundException("Article not found with id " + id));
     }
 
     @Override

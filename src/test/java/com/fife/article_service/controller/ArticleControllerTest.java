@@ -8,7 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fife.article_service.dto.ArticleRequest;
 import com.fife.article_service.exception.GlobalExceptionHandler;
-import com.fife.article_service.exception.ResourceNotFoundException;
+import com.fife.article_service.exception.NotFoundException;
 import com.fife.article_service.model.Article;
 import com.fife.article_service.service.ArticleService;
 import com.fife.article_service.utils.ApiConstant;
@@ -100,7 +100,7 @@ public class ArticleControllerTest {
     @Test
     void getArticleById_WhenNotFound_Returns404() throws Exception {
         Mockito.when(articleService.getArticleById(99L))
-                .thenThrow(new ResourceNotFoundException("Article not found"));
+                .thenThrow(new NotFoundException("Article not found"));
 
         mockMvc.perform(get(ApiConstant.API_V1_ARTICLE + "/99")).andExpect(status().isNotFound());
     }
@@ -148,7 +148,7 @@ public class ArticleControllerTest {
         Mockito.when(modelMapper.map(request, Article.class)).thenReturn(mappedArticle);
 
         Mockito.when(articleService.updateArticle(eq(99L), any(Article.class)))
-                .thenThrow(new ResourceNotFoundException("Article not found"));
+                .thenThrow(new NotFoundException("Article not found"));
 
         mockMvc.perform(
                         put(ApiConstant.API_V1_ARTICLE + "/99")
@@ -167,7 +167,7 @@ public class ArticleControllerTest {
 
     @Test
     void deleteArticle_WhenNotFound_Returns404() throws Exception {
-        Mockito.doThrow(new ResourceNotFoundException("Article not found"))
+        Mockito.doThrow(new NotFoundException("Article not found"))
                 .when(articleService)
                 .deleteArticle(99L);
 

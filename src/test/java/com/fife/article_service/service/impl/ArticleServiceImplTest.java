@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 import com.fife.article_service.dao.ArticleDao;
-import com.fife.article_service.exception.ResourceNotFoundException;
+import com.fife.article_service.exception.NotFoundException;
 import com.fife.article_service.model.Article;
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +68,7 @@ class ArticleServiceImplTest {
 
         when(this.articleDao.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> this.articleService.getArticleById(id));
+        assertThrows(NotFoundException.class, () -> this.articleService.getArticleById(id));
         verify(this.articleDao, times(1)).findById(id);
     }
 
@@ -99,7 +99,7 @@ class ArticleServiceImplTest {
         when(this.articleDao.findById(id)).thenReturn(Optional.empty());
 
         assertThrows(
-                ResourceNotFoundException.class,
+                NotFoundException.class,
                 () -> this.articleService.updateArticle(id, updateData));
         verify(this.articleDao, times(1)).findById(id);
         verify(this.articleDao, never()).save(any());
@@ -124,7 +124,7 @@ class ArticleServiceImplTest {
 
         when(this.articleDao.findById(id)).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> this.articleService.deleteArticle(id));
+        assertThrows(NotFoundException.class, () -> this.articleService.deleteArticle(id));
         verify(this.articleDao, times(1)).findById(id);
         verify(this.articleDao, never()).delete(any());
     }
