@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class Article {
-    private Long id;
+    private String id;
     private String title;
     private String content;
     private String author;
