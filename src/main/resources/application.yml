@@ -2,22 +2,10 @@
 spring:
   application:
     name: article-service
-# DATASOURCE
-  datasource:
-    url: jdbc:postgresql://localhost:5432/article_db
-    username: postgres
-    password: postgres
-# HIBERNATE-JPA
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-# LIQUIBASE
-  liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.yml
+# MONGODB
+  data:
+    mongodb:
+      uri: mongodb://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_HOST}:${MONGO_PORT}/${MONGO_DB}?authSource=admin
 # SERVER PORT
 server:
   port: 8081

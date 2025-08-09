@@ -1,4 +1,0 @@
-databaseChangeLog:
-  - include:
-      file: db/migrations/001-create-article-table.sql
-      relativeToChangelogFile: false

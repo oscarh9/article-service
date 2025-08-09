@@ -1,25 +1,21 @@
 package com.fife.article_service.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
+import lombok.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Entity
-@Table(name = "articles")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Document(collection = "articles")
 public class ArticleEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Id private String id;
     private String title;
     private String content;
     private String author;
-
-    @Column(name = "created_at")
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

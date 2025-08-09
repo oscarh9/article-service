@@ -41,7 +41,7 @@ public class ArticleControllerTest {
     @BeforeEach
     void setUp() {
         sampleResponse = new Article();
-        sampleResponse.setId(1L);
+        sampleResponse.setId("1");
         sampleResponse.setTitle("Sample Title");
         sampleResponse.setContent("Sample Content");
         sampleResponse.setAuthor("Sample Author");
@@ -71,7 +71,7 @@ public class ArticleControllerTest {
     @Test
     void getAllArticles_ReturnsListOfArticles() throws Exception {
         Article response2 = new Article();
-        response2.setId(2L);
+        response2.setId("2");
         response2.setTitle("Another Title");
         response2.setContent("Another Content");
         response2.setAuthor("Another Author");
@@ -89,7 +89,7 @@ public class ArticleControllerTest {
 
     @Test
     void getArticleById_WhenFound_ReturnsArticle() throws Exception {
-        Mockito.when(articleService.getArticleById(1L)).thenReturn(sampleResponse);
+        Mockito.when(articleService.getArticleById("1")).thenReturn(sampleResponse);
 
         mockMvc.perform(get(ApiConstant.API_V1_ARTICLE + "/1"))
                 .andExpect(status().isOk())
@@ -99,7 +99,7 @@ public class ArticleControllerTest {
 
     @Test
     void getArticleById_WhenNotFound_Returns404() throws Exception {
-        Mockito.when(articleService.getArticleById(99L))
+        Mockito.when(articleService.getArticleById("99"))
                 .thenThrow(new NotFoundException("Article not found"));
 
         mockMvc.perform(get(ApiConstant.API_V1_ARTICLE + "/99")).andExpect(status().isNotFound());
@@ -113,14 +113,14 @@ public class ArticleControllerTest {
         request.setAuthor("Updated Author");
 
         Article updatedResponse = new Article();
-        updatedResponse.setId(1L);
+        updatedResponse.setId("1");
         updatedResponse.setTitle("Updated Title");
         updatedResponse.setContent("Updated Content");
         updatedResponse.setAuthor("Updated Author");
         updatedResponse.setCreatedAt(LocalDateTime.now());
 
         Mockito.when(modelMapper.map(request, Article.class)).thenReturn(updatedResponse);
-        Mockito.when(articleService.updateArticle(eq(1L), any(Article.class)))
+        Mockito.when(articleService.updateArticle(eq("1"), any(Article.class)))
                 .thenReturn(updatedResponse);
 
         mockMvc.perform(
@@ -147,7 +147,7 @@ public class ArticleControllerTest {
 
         Mockito.when(modelMapper.map(request, Article.class)).thenReturn(mappedArticle);
 
-        Mockito.when(articleService.updateArticle(eq(99L), any(Article.class)))
+        Mockito.when(articleService.updateArticle(eq("99"), any(Article.class)))
                 .thenThrow(new NotFoundException("Article not found"));
 
         mockMvc.perform(
@@ -159,7 +159,7 @@ public class ArticleControllerTest {
 
     @Test
     void deleteArticle_WhenFound_ReturnsNoContent() throws Exception {
-        Mockito.doNothing().when(articleService).deleteArticle(1L);
+        Mockito.doNothing().when(articleService).deleteArticle("1");
 
         mockMvc.perform(delete(ApiConstant.API_V1_ARTICLE + "/1"))
                 .andExpect(status().isNoContent());
@@ -169,7 +169,7 @@ public class ArticleControllerTest {
     void deleteArticle_WhenNotFound_Returns404() throws Exception {
         Mockito.doThrow(new NotFoundException("Article not found"))
                 .when(articleService)
-                .deleteArticle(99L);
+                .deleteArticle("99");
 
         mockMvc.perform(delete(ApiConstant.API_V1_ARTICLE + "/99"))
                 .andExpect(status().isNotFound());

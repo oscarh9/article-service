@@ -21,6 +21,8 @@ import org.modelmapper.ModelMapper;
 @ExtendWith(MockitoExtension.class)
 class JpaArticleDaoTest {
 
+    private static final String ID = "id";
+
     @InjectMocks private JpaArticleDao jpaArticleDao;
 
     @Mock private ArticleRepository articleRepository;
@@ -53,25 +55,22 @@ class JpaArticleDaoTest {
 
     @Test
     void givenExistentIdWhenFindByIdThenReturnArticle() {
-        Long id = 1L;
         ArticleEntity articleEntity = mock(ArticleEntity.class);
         Article article = mock(Article.class);
 
-        when(this.articleRepository.findById(id)).thenReturn(Optional.of(articleEntity));
+        when(this.articleRepository.findById(ID)).thenReturn(Optional.of(articleEntity));
         when(this.mapper.map(articleEntity, Article.class)).thenReturn(article);
 
-        Article result = this.jpaArticleDao.findById(id).orElse(null);
+        Article result = this.jpaArticleDao.findById(ID).orElse(null);
 
         assertThat(result, is(article));
     }
 
     @Test
     void givenNonExistentIdWhenFindByIdThenReturnNull() {
-        Long id = 1L;
+        when(this.articleRepository.findById(ID)).thenReturn(Optional.empty());
 
-        when(this.articleRepository.findById(id)).thenReturn(Optional.empty());
-
-        Article result = this.jpaArticleDao.findById(id).orElse(null);
+        Article result = this.jpaArticleDao.findById(ID).orElse(null);
 
         assertNull(result);
     }

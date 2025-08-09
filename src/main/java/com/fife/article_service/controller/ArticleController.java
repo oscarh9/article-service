@@ -32,19 +32,19 @@ public class ArticleController {
     }
 
     @GetMapping(ApiConstant.ID)
-    public ResponseEntity<Article> getArticleById(@PathVariable Long id) {
+    public ResponseEntity<Article> getArticleById(@PathVariable String id) {
         return ResponseEntity.ok(articleService.getArticleById(id));
     }
 
     @PutMapping(ApiConstant.ID)
     public ResponseEntity<Article> updateArticle(
-            @PathVariable Long id, @Valid @RequestBody ArticleRequest articleRequest) {
+            @PathVariable String id, @Valid @RequestBody ArticleRequest articleRequest) {
         Article article = modelMapper.map(articleRequest, Article.class);
         return ResponseEntity.ok(articleService.updateArticle(id, article));
     }
 
     @DeleteMapping(ApiConstant.ID)
-    public ResponseEntity<Void> deleteArticle(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteArticle(@PathVariable String id) {
         articleService.deleteArticle(id);
         return ResponseEntity.noContent().build();
     }
