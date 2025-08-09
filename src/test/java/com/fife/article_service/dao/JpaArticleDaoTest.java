@@ -21,7 +21,7 @@ import org.modelmapper.ModelMapper;
 @ExtendWith(MockitoExtension.class)
 class JpaArticleDaoTest {
 
-    private static final String ID ="id";
+    private static final String ID = "id";
 
     @InjectMocks private JpaArticleDao jpaArticleDao;
 
