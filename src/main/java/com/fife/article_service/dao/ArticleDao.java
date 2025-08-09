@@ -9,7 +9,7 @@ public interface ArticleDao {
 
     List<Article> findAll();
 
-    Optional<Article> findById(Long id);
+    Optional<Article> findById(String id);
 
     void delete(Article article);
 }

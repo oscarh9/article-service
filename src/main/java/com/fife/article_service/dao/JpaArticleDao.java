@@ -32,7 +32,7 @@ public class JpaArticleDao implements ArticleDao {
     }
 
     @Override
-    public Optional<Article> findById(Long id) {
+    public Optional<Article> findById(String id) {
         return articleRepository.findById(id).map(entity -> modelMapper.map(entity, Article.class));
     }
 
