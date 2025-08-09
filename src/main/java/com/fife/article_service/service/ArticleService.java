@@ -8,9 +8,9 @@ public interface ArticleService {
 
     List<Article> getAllArticles();
 
-    Article getArticleById(Long id);
+    Article getArticleById(String id);
 
-    Article updateArticle(Long id, Article article);
+    Article updateArticle(String id, Article article);
 
-    void deleteArticle(Long id);
+    void deleteArticle(String id);
 }

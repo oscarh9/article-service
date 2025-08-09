@@ -27,14 +27,14 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public Article getArticleById(Long id) {
+    public Article getArticleById(String id) {
         return articleDao
                 .findById(id)
                 .orElseThrow(() -> new NotFoundException("Article not found with id " + id));
     }
 
     @Override
-    public Article updateArticle(Long id, Article article) {
+    public Article updateArticle(String id, Article article) {
         Article existing = getArticleById(id);
         existing.setTitle(article.getTitle());
         existing.setContent(article.getContent());
@@ -43,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void deleteArticle(Long id) {
+    public void deleteArticle(String id) {
         Article article = getArticleById(id);
         articleDao.delete(article);
     }

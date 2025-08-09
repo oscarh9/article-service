@@ -20,6 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceImplTest {
 
+    private static final String ID = "id";
+
     @InjectMocks private ArticleServiceImpl articleService;
 
     @Mock private ArticleDao articleDao;
@@ -51,38 +53,34 @@ class ArticleServiceImplTest {
 
     @Test
     void givenExistentIdWhenGetArticleByIdThenReturnArticle() {
-        Long id = 1L;
         Article article = mock(Article.class);
 
-        when(this.articleDao.findById(id)).thenReturn(Optional.of(article));
+        when(this.articleDao.findById(ID)).thenReturn(Optional.of(article));
 
-        Article result = this.articleService.getArticleById(id);
+        Article result = this.articleService.getArticleById(ID);
 
         assertThat(result, is(article));
-        verify(this.articleDao, times(1)).findById(id);
+        verify(this.articleDao, times(1)).findById(ID);
     }
 
     @Test
     void givenNonExistentIdWhenGetArticleByIdThenThrowException() {
-        Long id = 1L;
+        when(this.articleDao.findById(ID)).thenReturn(Optional.empty());
 
-        when(this.articleDao.findById(id)).thenReturn(Optional.empty());
-
-        assertThrows(NotFoundException.class, () -> this.articleService.getArticleById(id));
-        verify(this.articleDao, times(1)).findById(id);
+        assertThrows(NotFoundException.class, () -> this.articleService.getArticleById(ID));
+        verify(this.articleDao, times(1)).findById(ID);
     }
 
     @Test
     void givenExistentIdWhenUpdateArticleThenReturnUpdatedArticle() {
-        Long id = 1L;
         Article existingArticle = mock(Article.class);
         Article updateData = mock(Article.class);
         Article updatedArticle = mock(Article.class);
 
-        when(this.articleDao.findById(id)).thenReturn(Optional.of(existingArticle));
+        when(this.articleDao.findById(ID)).thenReturn(Optional.of(existingArticle));
         when(this.articleDao.save(existingArticle)).thenReturn(updatedArticle);
 
-        Article result = this.articleService.updateArticle(id, updateData);
+        Article result = this.articleService.updateArticle(ID, updateData);
 
         assertThat(result, is(updatedArticle));
         verify(existingArticle, times(1)).setTitle(any());
@@ -93,38 +91,35 @@ class ArticleServiceImplTest {
 
     @Test
     void givenNonExistentIdWhenUpdateArticleThenThrowException() {
-        Long id = 1L;
         Article updateData = mock(Article.class);
 
-        when(this.articleDao.findById(id)).thenReturn(Optional.empty());
+        when(this.articleDao.findById(ID)).thenReturn(Optional.empty());
 
         assertThrows(
-                NotFoundException.class, () -> this.articleService.updateArticle(id, updateData));
-        verify(this.articleDao, times(1)).findById(id);
+                NotFoundException.class, () -> this.articleService.updateArticle(ID, updateData));
+        verify(this.articleDao, times(1)).findById(ID);
         verify(this.articleDao, never()).save(any());
     }
 
     @Test
     void givenExistentIdWhenDeleteArticleThenDeleteIt() {
-        Long id = 1L;
         Article article = mock(Article.class);
 
-        when(this.articleDao.findById(id)).thenReturn(Optional.of(article));
+        when(this.articleDao.findById(ID)).thenReturn(Optional.of(article));
 
-        this.articleService.deleteArticle(id);
+        this.articleService.deleteArticle(ID);
 
-        verify(this.articleDao, times(1)).findById(id);
+        verify(this.articleDao, times(1)).findById(ID);
         verify(this.articleDao, times(1)).delete(article);
     }
 
     @Test
     void givenNonExistentIdWhenDeleteArticleThenThrowException() {
-        Long id = 1L;
 
-        when(this.articleDao.findById(id)).thenReturn(Optional.empty());
+        when(this.articleDao.findById(ID)).thenReturn(Optional.empty());
 
-        assertThrows(NotFoundException.class, () -> this.articleService.deleteArticle(id));
-        verify(this.articleDao, times(1)).findById(id);
+        assertThrows(NotFoundException.class, () -> this.articleService.deleteArticle(ID));
+        verify(this.articleDao, times(1)).findById(ID);
         verify(this.articleDao, never()).delete(any());
     }
 }
