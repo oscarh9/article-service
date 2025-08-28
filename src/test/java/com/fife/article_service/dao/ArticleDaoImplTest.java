@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
 
+import com.fife.article_service.dao.impl.ArticleDaoImpl;
 import com.fife.article_service.entity.ArticleEntity;
 import com.fife.article_service.model.Article;
 import com.fife.article_service.repository.ArticleRepository;
@@ -19,11 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 
 @ExtendWith(MockitoExtension.class)
-class JpaArticleDaoTest {
+class ArticleDaoImplTest {
 
     private static final String ID = "id";
 
-    @InjectMocks private JpaArticleDao jpaArticleDao;
+    @InjectMocks private ArticleDaoImpl jpaArticleDao;
 
     @Mock private ArticleRepository articleRepository;
 

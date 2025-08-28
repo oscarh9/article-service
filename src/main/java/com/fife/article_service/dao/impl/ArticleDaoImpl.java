@@ -1,5 +1,6 @@
-package com.fife.article_service.dao;
+package com.fife.article_service.dao.impl;
 
+import com.fife.article_service.dao.ArticleDao;
 import com.fife.article_service.entity.ArticleEntity;
 import com.fife.article_service.model.Article;
 import com.fife.article_service.repository.ArticleRepository;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class JpaArticleDao implements ArticleDao {
+public class ArticleDaoImpl implements ArticleDao {
 
     private final ArticleRepository articleRepository;
     private final ModelMapper modelMapper;
