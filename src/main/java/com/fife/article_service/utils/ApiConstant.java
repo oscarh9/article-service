@@ -10,6 +10,6 @@ public class ApiConstant {
     public static final String ARTICLE = "/article";
     public static final String COMMENT = "/comment";
     public static final String API_V1_ARTICLE = API + V1 + ARTICLE;
-    public static final String API_V1_COMMENT = API + V1 + COMMENT;
-    public static final String ID = "/{id}";
+    public static final String ARTICLE_ID = "/{articleId}";
+    public static final String COMMENT_ID = "/{commentId}";
 }
