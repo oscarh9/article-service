@@ -8,6 +8,10 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Component
 @RequiredArgsConstructor
 public class CommentDaoImpl implements CommentDao {
@@ -20,5 +24,19 @@ public class CommentDaoImpl implements CommentDao {
         CommentEntity entity = modelMapper.map(comment, CommentEntity.class);
         CommentEntity saved = commentRepository.save(entity);
         return modelMapper.map(saved, Comment.class);
+    }
+
+    @Override
+    public List<Comment> findByArticleId(String articleId) {
+        return commentRepository.findByArticleId(articleId)
+                .stream()
+                .map(entity -> modelMapper.map(entity, Comment.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional<Comment> findById(String commentId) {
+        return commentRepository.findById(commentId)
+                .map(entity -> modelMapper.map(entity, Comment.class));
     }
 }
