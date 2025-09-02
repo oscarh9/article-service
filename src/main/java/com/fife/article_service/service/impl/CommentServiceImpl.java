@@ -33,4 +33,15 @@ public class CommentServiceImpl implements CommentService {
         return commentDao.findById(commentId)
                 .orElseThrow(() -> new NotFoundException("Comment not found with id " + commentId));
     }
+
+
+
+    @Override
+    public Comment updateComment(String articleId, String commentId, Comment comment) {
+        Comment existing =  commentDao.findByIdAndArticleId(commentId, articleId)
+                        .orElseThrow(() -> new RuntimeException("Comment not found"));
+        existing.setContent(comment.getContent());
+        existing.setUpdatedAt(LocalDateTime.now());
+        return commentDao.updateComment(existing);
+    }
 }
