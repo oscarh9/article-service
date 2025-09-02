@@ -9,4 +9,6 @@ public interface CommentDao {
     Comment save(Comment comment);
     List<Comment> findByArticleId(String articleId);
     Optional<Comment> findById(String commentId);
+    Optional<Comment> findByIdAndArticleId(String commentId, String articleId);
+    Comment updateComment(Comment comment);
 }

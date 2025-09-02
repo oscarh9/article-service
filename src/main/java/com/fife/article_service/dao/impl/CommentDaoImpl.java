@@ -39,4 +39,18 @@ public class CommentDaoImpl implements CommentDao {
         return commentRepository.findById(commentId)
                 .map(entity -> modelMapper.map(entity, Comment.class));
     }
+
+    @Override
+    public Optional<Comment> findByIdAndArticleId(String commentId, String articleId) {
+        return commentRepository.findByIdAndArticleId(commentId, articleId)
+                .map(entity -> modelMapper.map(entity, Comment.class));
+    }
+
+
+    @Override
+    public Comment updateComment(Comment comment) {
+        CommentEntity entity = modelMapper.map(comment, CommentEntity.class);
+        CommentEntity saved = commentRepository.save(entity);
+        return modelMapper.map(saved, Comment.class);
+    }
 }
