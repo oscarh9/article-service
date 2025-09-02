@@ -1,9 +1,12 @@
 package com.fife.article_service.service.impl;
 
 import com.fife.article_service.dao.CommentDao;
+import com.fife.article_service.exception.NotFoundException;
 import com.fife.article_service.model.Comment;
 import com.fife.article_service.service.CommentService;
 import java.time.LocalDateTime;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,5 +21,16 @@ public class CommentServiceImpl implements CommentService {
         comment.setArticleId(articleId);
         comment.setCreatedAt(LocalDateTime.now());
         return commentDao.save(comment);
+    }
+
+    @Override
+    public List<Comment> getCommentsByArticleId(String articleId) {
+        return commentDao.findByArticleId(articleId);
+    }
+
+    @Override
+    public Comment getCommentById(String commentId) {
+        return commentDao.findById(commentId)
+                .orElseThrow(() -> new NotFoundException("Comment not found with id " + commentId));
     }
 }
