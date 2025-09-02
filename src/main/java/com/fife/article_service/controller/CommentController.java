@@ -1,6 +1,7 @@
 package com.fife.article_service.controller;
 
 import com.fife.article_service.dto.CommentRequest;
+import com.fife.article_service.dto.CommentUpdateRequest;
 import com.fife.article_service.model.Comment;
 import com.fife.article_service.service.CommentService;
 import com.fife.article_service.utils.ApiConstant;
@@ -36,5 +37,11 @@ public class CommentController {
     public ResponseEntity<Comment> getCommentById(@PathVariable String commentId) {
         Comment comment = commentService.getCommentById(commentId);
         return ResponseEntity.ok(comment);
+    }
+
+    @PutMapping(ApiConstant.COMMENT_ID)
+    public ResponseEntity<Comment> updateComment(@PathVariable String articleId, @PathVariable String commentId, @Valid @RequestBody CommentUpdateRequest commentUpdateRequest) {
+        Comment comment = modelMapper.map(commentUpdateRequest, Comment.class);
+        return ResponseEntity.ok(commentService.updateComment(articleId, commentId, comment));
     }
 }
