@@ -53,4 +53,10 @@ public class CommentDaoImpl implements CommentDao {
         CommentEntity saved = commentRepository.save(entity);
         return modelMapper.map(saved, Comment.class);
     }
+
+    @Override
+    public void delete(Comment comment) {
+        CommentEntity entity = modelMapper.map(comment, CommentEntity.class);
+        commentRepository.delete(entity);
+    }
 }

@@ -11,4 +11,5 @@ public interface CommentDao {
     Optional<Comment> findById(String commentId);
     Optional<Comment> findByIdAndArticleId(String commentId, String articleId);
     Comment updateComment(Comment comment);
+    void delete(Comment comment);
 }
