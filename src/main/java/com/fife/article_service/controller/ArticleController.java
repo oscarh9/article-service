@@ -32,20 +32,20 @@ public class ArticleController {
     }
 
     @GetMapping(ApiConstant.ARTICLE_ID)
-    public ResponseEntity<Article> getArticleById(@PathVariable String id) {
-        return ResponseEntity.ok(articleService.getArticleById(id));
+    public ResponseEntity<Article> getArticleById(@PathVariable String articleId) {
+        return ResponseEntity.ok(articleService.getArticleById(articleId));
     }
 
     @PutMapping(ApiConstant.ARTICLE_ID)
     public ResponseEntity<Article> updateArticle(
-            @PathVariable String id, @Valid @RequestBody ArticleRequest articleRequest) {
+            @PathVariable String articleId, @Valid @RequestBody ArticleRequest articleRequest) {
         Article article = modelMapper.map(articleRequest, Article.class);
-        return ResponseEntity.ok(articleService.updateArticle(id, article));
+        return ResponseEntity.ok(articleService.updateArticle(articleId, article));
     }
 
     @DeleteMapping(ApiConstant.ARTICLE_ID)
-    public ResponseEntity<Void> deleteArticle(@PathVariable String id) {
-        articleService.deleteArticle(id);
+    public ResponseEntity<Void> deleteArticle(@PathVariable String articleId) {
+        articleService.deleteArticle(articleId);
         return ResponseEntity.noContent().build();
     }
 }
