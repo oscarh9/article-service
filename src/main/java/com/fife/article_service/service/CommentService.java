@@ -9,4 +9,5 @@ public interface CommentService {
     List<Comment> getCommentsByArticleId (String articleId);
     Comment getCommentById (String commentId);
     Comment updateComment (String articleId, String commentId, Comment comment);
+    void deleteComment(String articleId, String commentId);
 }

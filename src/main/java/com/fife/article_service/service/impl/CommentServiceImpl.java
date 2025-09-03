@@ -44,4 +44,11 @@ public class CommentServiceImpl implements CommentService {
         existing.setUpdatedAt(LocalDateTime.now());
         return commentDao.updateComment(existing);
     }
+
+    @Override
+    public void deleteComment(String articleId, String commentId) {
+        Comment existing = commentDao.findByIdAndArticleId(commentId, articleId)
+                .orElseThrow(() -> new RuntimeException("Comment not found"));
+        commentDao.delete(existing);
+    }
 }
