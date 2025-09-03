@@ -12,4 +12,5 @@ public interface CommentDao {
     Optional<Comment> findByIdAndArticleId(String commentId, String articleId);
     Comment updateComment(Comment comment);
     void delete(Comment comment);
+    void deleteByArticleId(String articleId);
 }

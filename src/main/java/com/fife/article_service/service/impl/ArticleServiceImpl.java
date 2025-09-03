@@ -1,6 +1,7 @@
 package com.fife.article_service.service.impl;
 
 import com.fife.article_service.dao.ArticleDao;
+import com.fife.article_service.dao.CommentDao;
 import com.fife.article_service.exception.NotFoundException;
 import com.fife.article_service.model.Article;
 import com.fife.article_service.service.ArticleService;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleDao articleDao;
+    private final CommentDao commentDao;
 
     @Override
     public Article createArticle(Article article) {
@@ -45,6 +47,7 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void deleteArticle(String id) {
         Article article = getArticleById(id);
+        commentDao.deleteByArticleId(article.getId());
         articleDao.delete(article);
     }
 }

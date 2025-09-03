@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface CommentRepository extends MongoRepository<CommentEntity, String> {
     List<CommentEntity> findByArticleId(String articleId);
     Optional<CommentEntity> findByIdAndArticleId(String commentId, String articleId);
+    void deleteByArticleId(String articleId);
 }
