@@ -44,4 +44,10 @@ public class CommentController {
         Comment comment = modelMapper.map(commentUpdateRequest, Comment.class);
         return ResponseEntity.ok(commentService.updateComment(articleId, commentId, comment));
     }
+
+    @DeleteMapping(ApiConstant.COMMENT_ID)
+    public ResponseEntity<Void> deleteComment(@PathVariable String articleId, @PathVariable String commentId) {
+        commentService.deleteComment(articleId, commentId);
+        return ResponseEntity.noContent().build();
+    }
 }
